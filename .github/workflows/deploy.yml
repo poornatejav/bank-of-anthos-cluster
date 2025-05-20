@@ -1,0 +1,51 @@
+name: Deploy to EKS via Terraform + ArgoCD
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  deploy-dev:
+    name: Deploy to Dev EKS
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: envs/dev
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.6.6
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          role-to-assume: ${{ secrets.AWS_DEPLOY_ROLE }}
+          aws-region: us-east-1
+
+      - name: Terraform Init
+        run: terraform init
+
+      - name: Terraform Apply
+        run: terraform apply -auto-approve
+
+      - name: Sync GitOps Repo
+        uses: actions/checkout@v3
+        with:
+          repository: YOUR_ORG/YOUR_GITOPS_REPO
+          token: ${{ secrets.GITOPS_PAT }}
+          path: gitops
+
+      - name: Update App Helm Values or Sync Manifests
+        run: |
+          cd gitops/environments/dev
+          # e.g. update image tags or app values here
+          git config user.name "GitOps Bot"
+          git config user.email "bot@yourcompany.com"
+          git add .
+          git commit -m "Trigger Argo CD Sync [skip ci]" || echo "No changes"
+          git push

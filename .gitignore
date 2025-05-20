@@ -1,0 +1,21 @@
+# Terraform state files
+*.tfstate
+*.tfstate.backup
+
+# Terraform variable files with secrets
+*.tfvars
+*.tfvars.json
+
+# Terraform working directory
+.terraform/
+
+# Sensitive files
+.env
+secrets.tfvars
+private.key
+*.pem
+*.crt
+
+# Terraform Cloud CLI credentials
+.terraformrc
+terraform.rc
