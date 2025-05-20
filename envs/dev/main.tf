@@ -39,5 +39,5 @@ module "gitops" {
   cluster_endpoint = module.eks.cluster_endpoint
   cluster_ca_data  = module.eks.cluster_certificate_authority_data
 
-  depends_on = [module.eks]
+  # depends_on = [module.eks]
 }
