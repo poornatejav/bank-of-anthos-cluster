@@ -34,7 +34,10 @@ module "monitoring" {
 
 module "gitops" {
   source = "../../modules/gitops"
-  cluster_name        = module.eks.cluster_name
-  cluster_endpoint    = module.eks.cluster_endpoint
-  cluster_ca_data     = module.eks.cluster_ca_data
+
+  cluster_name     = module.eks.cluster_name
+  cluster_endpoint = module.eks.cluster_endpoint
+  cluster_ca_data  = module.eks.cluster_certificate_authority_data
+
+  depends_on = [module.eks]
 }
