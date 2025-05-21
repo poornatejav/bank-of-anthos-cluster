@@ -19,6 +19,59 @@ resource "helm_release" "kube_prometheus_stack" {
   create_namespace = true
 
   values = [
-    # file("${path.module}/values.yaml")
+    yamlencode({
+      grafana = {
+        ingress = {
+          enabled = true
+          ingressClassName = "nginx"
+          annotations = {
+            "nginx.ingress.kubernetes.io/rewrite-target" = "/$2"
+          }
+          hosts = ["*"]
+          paths = [{
+            path     = "/grafana(/|$)(.*)"
+            pathType = "ImplementationSpecific"
+          }]
+        }
+        service = {
+          type = "ClusterIP"
+        }
+      },
+      prometheus = {
+        ingress = {
+          enabled = true
+          ingressClassName = "nginx"
+          annotations = {
+            "nginx.ingress.kubernetes.io/rewrite-target" = "/$2"
+          }
+          hosts = ["*"]
+          paths = [{
+            path     = "/prometheus(/|$)(.*)"
+            pathType = "ImplementationSpecific"
+          }]
+        }
+        service = {
+          type = "ClusterIP"
+        }
+      },
+      alertmanager = {
+        ingress = {
+          enabled = true
+          ingressClassName = "nginx"
+          annotations = {
+            "nginx.ingress.kubernetes.io/rewrite-target" = "/$2"
+          }
+          hosts = ["*"]
+          paths = [{
+            path     = "/alertmanager(/|$)(.*)"
+            pathType = "ImplementationSpecific"
+          }]
+        }
+        service = {
+          type = "ClusterIP"
+        }
+      }
+    })
   ]
+
 }
