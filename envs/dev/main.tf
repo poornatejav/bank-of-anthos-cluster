@@ -42,3 +42,12 @@ module "gitops" {
 
   # depends_on = [module.eks]
 }
+
+module "ingress" {
+  source           = "../../modules/ingress"
+  cluster_name     = module.eks.cluster_name
+  cluster_endpoint = module.eks.cluster_endpoint
+  cluster_ca_data  = module.eks.cluster_ca_data
+}
+
+
