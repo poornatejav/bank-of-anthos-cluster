@@ -67,7 +67,7 @@ resource "helm_release" "argocd" {
           annotations = {
             "nginx.ingress.kubernetes.io/rewrite-target" = "/$2"
           }
-          hosts = ["*"]
+          # hosts = ["*"]
           paths = [{
             path     = "/argocd(/|$)(.*)"
             pathType = "ImplementationSpecific"
