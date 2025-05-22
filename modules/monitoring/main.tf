@@ -35,10 +35,6 @@ resource "helm_release" "kube_prometheus_stack" {
         service = {
           type = "ClusterIP"
         }
-        "grafana.ini" = <<-EOT
-          [server]
-          root_url = %(protocol)s://%(domain)s:%(http_port)s/grafana/
-        EOT
         serve_from_sub_path = true
       }
 
@@ -77,4 +73,6 @@ resource "helm_release" "kube_prometheus_stack" {
       }
     })
   ]
+
+  depends_on = [module.eks]
 }
