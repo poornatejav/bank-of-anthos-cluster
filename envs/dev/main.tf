@@ -42,3 +42,12 @@ module "gitops" {
 
   # depends_on = [module.eks]
 }
+
+
+module "ingress_nginx" {
+  source = "./helm_ingress_nginx"
+}
+
+module "ingress_rules" {
+  source = "./ingress_rules"
+}
