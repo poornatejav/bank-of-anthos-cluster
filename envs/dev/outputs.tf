@@ -1,4 +1,10 @@
+data "kubernetes_service" "nginx_ingress" {
+  metadata {
+    name      = "ingress-nginx-controller"
+    namespace = "ingress-nginx"
+  }
+}
+
 output "nginx_lb_hostname" {
-  value       = module.ingress_nginx.nginx_lb_hostname
-  description = "External Load Balancer DNS"
+  value = data.kubernetes_service.nginx_ingress.status[0].load_balancer[0].ingress[0].hostname
 }
