@@ -61,6 +61,18 @@ resource "helm_release" "argocd" {
   values = [
     yamlencode({
       server = {
+        ingress = {
+          enabled           = true
+          ingressClassName = "nginx"
+          annotations = {
+            "nginx.ingress.kubernetes.io/rewrite-target" = "/$2"
+          }
+          # hosts = ["*"]
+          paths = [{
+            path     = "/argocd(/|$)(.*)"
+            pathType = "ImplementationSpecific"
+          }]
+        }
         service = {
           type = "ClusterIP"
         }
@@ -68,7 +80,6 @@ resource "helm_release" "argocd" {
     })
   ]
 }
-
 
 resource "kubectl_manifest" "argocd_app" {
   yaml_body  = file("${path.module}/bootstrap-app.yml")
