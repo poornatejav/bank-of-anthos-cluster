@@ -45,9 +45,9 @@ module "gitops" {
 
 
 module "ingress_nginx" {
-  source = "../../helm_ingress_nginx"
+  source = "../../modules/helm_ingress_nginx"
 }
 
 module "ingress_rules" {
-  source = "../../ingress_rules"
+  source = "../../modules/ingress_rules"
 }
