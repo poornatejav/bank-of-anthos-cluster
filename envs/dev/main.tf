@@ -25,12 +25,38 @@ module "eks" {
   node_role_arn           = module.iam.node_role_arn
 }
 
+provider "kubernetes" {
+  host                   = module.eks.cluster_endpoint
+  cluster_ca_certificate = base64decode(module.eks.cluster_ca_certificate)
+  exec {
+    api_version = "client.authentication.k8s.io/v1beta1"
+    command     = "aws"
+    args        = ["eks", "get-token", "--cluster-name", module.eks.cluster_name]
+  }
+}
+
+provider "helm" {
+  kubernetes {
+    host                   = module.eks.cluster_endpoint
+    cluster_ca_certificate = base64decode(module.eks.cluster_ca_certificate)
+    exec {
+      api_version = "client.authentication.k8s.io/v1beta1"
+      command     = "aws"
+      args        = ["eks", "get-token", "--cluster-name", module.eks.cluster_name]
+    }
+  }
+}
+
 module "monitoring" {
   source = "../../modules/monitoring"
   cluster_name        = module.eks.cluster_name
   cluster_endpoint    = module.eks.cluster_endpoint
   cluster_ca_data     = module.eks.cluster_ca_data
 
+  providers = {
+    kubernetes = kubernetes
+    helm       = helm
+  }
 }
 
 module "gitops" {
@@ -40,10 +66,18 @@ module "gitops" {
   cluster_endpoint = module.eks.cluster_endpoint
   cluster_ca_data  = module.eks.cluster_ca_data
 
+  providers = {
+    kubernetes = kubernetes
+    helm       = helm
+  }
 
 }
 
 module "ingress" {
   source = "../../modules/ingress"
 
+  providers = {
+    kubernetes = kubernetes
+    helm       = helm
+  }
 }
