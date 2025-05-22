@@ -34,50 +34,13 @@ resource "helm_release" "kube_prometheus_stack" {
 
   values = [
     yamlencode({
-      grafana = {
-        ingress = {
-          enabled          = true
-          ingressClassName = "nginx"
-          annotations = {
-            "nginx.ingress.kubernetes.io/rewrite-target" = "/"
-          }
-          hosts = ["*"]             # or [] if you don't want to specify host
-          path  = "/grafana"
-          pathType = "Prefix"
-        }
-        service = {
-          type = "ClusterIP"
-        }
-        serve_from_sub_path = true
-      }
       prometheus = {
-        ingress = {
-          enabled          = true
-          ingressClassName = "nginx"
-          annotations = {
-            "nginx.ingress.kubernetes.io/rewrite-target" = "/"
-          }
-          hosts = ["*"]
-          path  = "/prometheus"
-          pathType = "Prefix"
-        }
-        service = {
-          type = "ClusterIP"
-        }
-      }
-      alertmanager = {
-        ingress = {
-          enabled          = true
-          ingressClassName = "nginx"
-          annotations = {
-            "nginx.ingress.kubernetes.io/rewrite-target" = "/"
-          }
-          hosts = ["*"]
-          path  = "/alertmanager"
-          pathType = "Prefix"
-        }
-        service = {
-          type = "ClusterIP"
+        prometheusSpec = {
+          additionalScrapeConfigs = <<-EOT
+            - job_name: "nginx"
+              static_configs:
+                - targets: ["localhost:9113"]
+          EOT
         }
       }
     })
