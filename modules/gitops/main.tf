@@ -29,6 +29,7 @@ resource "helm_release" "argocd" {
           annotations = {
             "nginx.ingress.kubernetes.io/ssl-redirect" = "true"
           }
+          hosts = [] 
           paths = [{
             path     = "/argocd"
             pathType = "Prefix"
