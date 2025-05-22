@@ -22,12 +22,11 @@ resource "helm_release" "kube_prometheus_stack" {
     yamlencode({
       grafana = {
         ingress = {
-          enabled = true
+          enabled          = true
           ingressClassName = "nginx"
           annotations = {
             "nginx.ingress.kubernetes.io/rewrite-target" = "/$2"
           }
-          # hosts = ["*"]
           paths = [{
             path     = "/grafana(/|$)(.*)"
             pathType = "ImplementationSpecific"
@@ -36,15 +35,21 @@ resource "helm_release" "kube_prometheus_stack" {
         service = {
           type = "ClusterIP"
         }
+        "grafana.ini" = {
+          server = {
+            root_url = "%(protocol)s://%(domain)s:%(http_port)s/grafana/"
+          }
+        }
+        serve_from_sub_path = true
       },
+
       prometheus = {
         ingress = {
-          enabled = true
+          enabled          = true
           ingressClassName = "nginx"
           annotations = {
             "nginx.ingress.kubernetes.io/rewrite-target" = "/$2"
           }
-          # hosts = ["*"]
           paths = [{
             path     = "/prometheus(/|$)(.*)"
             pathType = "ImplementationSpecific"
@@ -54,14 +59,14 @@ resource "helm_release" "kube_prometheus_stack" {
           type = "ClusterIP"
         }
       },
+
       alertmanager = {
         ingress = {
-          enabled = true
+          enabled          = true
           ingressClassName = "nginx"
           annotations = {
             "nginx.ingress.kubernetes.io/rewrite-target" = "/$2"
           }
-          # hosts = ["*"]
           paths = [{
             path     = "/alertmanager(/|$)(.*)"
             pathType = "ImplementationSpecific"
@@ -73,5 +78,4 @@ resource "helm_release" "kube_prometheus_stack" {
       }
     })
   ]
-
 }

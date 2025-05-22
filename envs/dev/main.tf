@@ -42,3 +42,7 @@ module "gitops" {
 
   # depends_on = [module.eks]
 }
+
+module "ingress" {
+  source = "../../modules/ingress"
+}
