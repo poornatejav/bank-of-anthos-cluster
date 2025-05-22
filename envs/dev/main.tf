@@ -53,10 +53,6 @@ module "monitoring" {
   cluster_endpoint    = module.eks.cluster_endpoint
   cluster_ca_data     = module.eks.cluster_ca_data
 
-  providers = {
-    kubernetes = kubernetes
-    helm       = helm
-  }
 }
 
 module "gitops" {
@@ -66,18 +62,9 @@ module "gitops" {
   cluster_endpoint = module.eks.cluster_endpoint
   cluster_ca_data  = module.eks.cluster_ca_data
 
-  providers = {
-    kubernetes = kubernetes
-    helm       = helm
-  }
-
 }
 
 module "ingress" {
   source = "../../modules/ingress"
 
-  providers = {
-    kubernetes = kubernetes
-    helm       = helm
-  }
 }
