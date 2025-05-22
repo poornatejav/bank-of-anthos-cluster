@@ -36,11 +36,12 @@ resource "helm_release" "kube_prometheus_stack" {
     yamlencode({
       grafana = {
         ingress = {
-          enabled          = true
-          ingressClassName = "nginx"
+          enabled           = true
+          ingressClassName  = "nginx"
           annotations = {
             "nginx.ingress.kubernetes.io/rewrite-target" = "/"
           }
+          hosts = ["*"]
           paths = [{
             path     = "/grafana"
             pathType = "Prefix"
@@ -54,11 +55,12 @@ resource "helm_release" "kube_prometheus_stack" {
 
       prometheus = {
         ingress = {
-          enabled          = true
-          ingressClassName = "nginx"
+          enabled           = true
+          ingressClassName  = "nginx"
           annotations = {
             "nginx.ingress.kubernetes.io/rewrite-target" = "/"
           }
+          hosts = ["*"]
           paths = [{
             path     = "/prometheus"
             pathType = "Prefix"
@@ -71,11 +73,12 @@ resource "helm_release" "kube_prometheus_stack" {
 
       alertmanager = {
         ingress = {
-          enabled          = true
-          ingressClassName = "nginx"
+          enabled           = true
+          ingressClassName  = "nginx"
           annotations = {
             "nginx.ingress.kubernetes.io/rewrite-target" = "/"
           }
+          hosts = ["*"]
           paths = [{
             path     = "/alertmanager"
             pathType = "Prefix"
