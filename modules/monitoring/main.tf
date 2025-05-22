@@ -41,10 +41,12 @@ resource "helm_release" "kube_prometheus_stack" {
           annotations = {
             "nginx.ingress.kubernetes.io/rewrite-target" = "/"
           }
-          hosts = ["*"]
-          paths = [{
-            path     = "/grafana"
-            pathType = "Prefix"
+          hosts = [{
+            host = "*"
+            paths = [{
+              path     = "/grafana"
+              pathType = "Prefix"
+            }]
           }]
         }
         service = {
@@ -60,10 +62,12 @@ resource "helm_release" "kube_prometheus_stack" {
           annotations = {
             "nginx.ingress.kubernetes.io/rewrite-target" = "/"
           }
-          hosts = ["*"]
-          paths = [{
-            path     = "/prometheus"
-            pathType = "Prefix"
+          hosts = [{
+            host = "*"
+            paths = [{
+              path     = "/prometheus"
+              pathType = "Prefix"
+            }]
           }]
         }
         service = {
@@ -78,10 +82,12 @@ resource "helm_release" "kube_prometheus_stack" {
           annotations = {
             "nginx.ingress.kubernetes.io/rewrite-target" = "/"
           }
-          hosts = ["*"]
-          paths = [{
-            path     = "/alertmanager"
-            pathType = "Prefix"
+          hosts = [{
+            host = "*"
+            paths = [{
+              path     = "/alertmanager"
+              pathType = "Prefix"
+            }]
           }]
         }
         service = {
