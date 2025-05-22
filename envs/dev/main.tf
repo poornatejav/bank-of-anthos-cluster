@@ -31,7 +31,6 @@ module "monitoring" {
   cluster_endpoint    = module.eks.cluster_endpoint
   cluster_ca_data     = module.eks.cluster_ca_data
 
-  depends_on = [module.eks]
 }
 
 module "gitops" {
@@ -42,11 +41,9 @@ module "gitops" {
   cluster_ca_data  = module.eks.cluster_ca_data
 
 
-  depends_on = [module.eks]
 }
 
 module "ingress" {
   source = "../../modules/ingress"
 
-  depends_on = [module.eks]
 }
