@@ -11,7 +11,7 @@ spec:
   source:
     repoURL: https://github.com/poornatejav/BOA_Manifests
     targetRevision: HEAD
-    path: kubernetes-manifests
+    path: environments/dev
   syncPolicy:
     automated:
       prune: true
