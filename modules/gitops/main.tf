@@ -68,8 +68,8 @@ resource "helm_release" "argocd" {
             "nginx.ingress.kubernetes.io/rewrite-target" = "/$2"
           }
           paths = [{
-            path     = "/argocd(/|$)(.*)"
-            pathType = "ImplementationSpecific"
+            path     = "/argocd"
+            pathType = "Prefix"
           }]
         }
         service = {

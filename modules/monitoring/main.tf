@@ -25,51 +25,50 @@ resource "helm_release" "kube_prometheus_stack" {
           enabled          = true
           ingressClassName = "nginx"
           annotations = {
-            "nginx.ingress.kubernetes.io/rewrite-target" = "/$2"
+            "nginx.ingress.kubernetes.io/rewrite-target" = "/"
           }
           paths = [{
-            path     = "/grafana(/|$)(.*)"
-            pathType = "ImplementationSpecific"
+            path     = "/grafana"
+            pathType = "Prefix"
           }]
         }
         service = {
           type = "ClusterIP"
         }
-        "grafana.ini" = {
-          server = {
-            root_url = "%(protocol)s://%(domain)s:%(http_port)s/grafana/"
-          }
-        }
+        "grafana.ini" = <<-EOT
+          [server]
+          root_url = %(protocol)s://%(domain)s:%(http_port)s/grafana/
+        EOT
         serve_from_sub_path = true
-      },
+      }
 
       prometheus = {
         ingress = {
           enabled          = true
           ingressClassName = "nginx"
           annotations = {
-            "nginx.ingress.kubernetes.io/rewrite-target" = "/$2"
+            "nginx.ingress.kubernetes.io/rewrite-target" = "/"
           }
           paths = [{
-            path     = "/prometheus(/|$)(.*)"
-            pathType = "ImplementationSpecific"
+            path     = "/prometheus"
+            pathType = "Prefix"
           }]
         }
         service = {
           type = "ClusterIP"
         }
-      },
+      }
 
       alertmanager = {
         ingress = {
           enabled          = true
           ingressClassName = "nginx"
           annotations = {
-            "nginx.ingress.kubernetes.io/rewrite-target" = "/$2"
+            "nginx.ingress.kubernetes.io/rewrite-target" = "/"
           }
           paths = [{
-            path     = "/alertmanager(/|$)(.*)"
-            pathType = "ImplementationSpecific"
+            path     = "/alertmanager"
+            pathType = "Prefix"
           }]
         }
         service = {
