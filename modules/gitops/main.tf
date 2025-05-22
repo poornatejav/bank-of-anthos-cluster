@@ -39,3 +39,8 @@ resource "helm_release" "argocd" {
     })
   ]
 }
+
+resource "kubectl_manifest" "argocd_app" {
+  yaml_body  = file("${path.module}/bootstrap-app.yml")
+  depends_on = [helm_release.argocd]
+}
