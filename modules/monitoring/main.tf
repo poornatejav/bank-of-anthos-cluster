@@ -41,13 +41,9 @@ resource "helm_release" "kube_prometheus_stack" {
           annotations = {
             "nginx.ingress.kubernetes.io/rewrite-target" = "/"
           }
-          hosts = [{
-            host = "*"
-            paths = [{
-              path     = "/grafana"
-              pathType = "Prefix"
-            }]
-          }]
+          hosts = ["*"]
+          path  = "/grafana"
+          pathType = "Prefix"
         }
         service = {
           type = "ClusterIP"
